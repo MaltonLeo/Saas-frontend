@@ -15,10 +15,11 @@ export default function LoginPage() {
     e.preventDefault();
     setError(null);
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/token/`,
-        form
-      );
+        const response = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/token/`,
+            form
+          );
+          
       const { access, refresh } = response.data;
       localStorage.setItem("access_token", access);
       localStorage.setItem("refresh_token", refresh);
