@@ -2,7 +2,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { getCustomerById } from '@/utils/api';
-
+import Spinner from "@/components/spinner";
 export default function CustomerDetailPage() {
   const router = useRouter();
   const { id } = router.query;
@@ -16,7 +16,7 @@ export default function CustomerDetailPage() {
     }
   }, [id]);
 
-  if (!customer) return <p className="p-6">Loading...</p>;
+  if (!customer) return <Spinner />;
 
   return (
     <div className="p-6">

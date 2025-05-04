@@ -1,26 +1,57 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { getTenants, getCustomersByTenant } from "@/utils/api";
+import axios from "axios";
 
-export default function Dashboard() {
+export default function DashboardPage() {
   const router = useRouter();
+  const [tenants, setTenants] = useState([]);
+  const [customerCount, setCustomerCount] = useState(0);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("access_token");
     if (!token) {
-      router.push('/login');
+      router.push("/login");
+    } else {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      loadData();
     }
   }, []);
 
+  async function loadData() {
+    try {
+      const tenantList = await getTenants();
+      setTenants(tenantList);
+
+      let totalCustomers = 0;
+      for (const tenant of tenantList) {
+        const customers = await getCustomersByTenant(tenant.id);
+        totalCustomers += customers.length;
+      }
+      setCustomerCount(totalCustomers);
+    } catch (error) {
+      console.error("Xatolik:", error);
+    }
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-white">
-      <h1 className="text-3xl font-bold mb-4">Xush kelibsiz, Admin 👋</h1>
-      <p className="mb-6 text-gray-600">Bu sizning boshqaruv panelingiz</p>
-      <button
-        onClick={() => router.push('/tenants')}
-        className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
-      >
-        ➕ Barcha Tenantlar
-      </button>
+    <div className="min-h-screen bg-animated p-6 text-black">
+      <h1 className="text-3xl font-bold mb-6">👋 Xush kelibsiz, Admin!</h1>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="bg-white shadow rounded p-4">
+          <h2 className="text-lg font-semibold">🧩 Tenantlar soni</h2>
+          <p className="text-2xl font-bold">{tenants.length}</p>
+        </div>
+        <div className="bg-white shadow rounded p-4">
+          <h2 className="text-lg font-semibold">👥 Customers soni</h2>
+          <p className="text-2xl font-bold">{customerCount}</p>
+        </div>
+      </div>
     </div>
   );
 }
+
+
+
+

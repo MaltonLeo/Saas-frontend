@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { getTenantById, deleteTenant, getCustomersByTenant } from '@/utils/api';
-
+import Spinner from "@/components/spinner";
 export default function TenantDetail() {
   const router = useRouter();
   const { id } = router.query;
@@ -25,7 +25,7 @@ useEffect(() => {
     }
   }, [id]);
 
-  if (!tenant) return <p className="p-6">Loading...</p>;
+  if (!tenant) return <Spinner />;
 
   return (
     <div className="p-6">

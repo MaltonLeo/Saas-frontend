@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { createCustomer, getTenants } from "@/utils/api";
+import { toast } from 'react-toastify';
 
 export default function CreateCustomerPage() {
   const router = useRouter();
@@ -19,36 +20,23 @@ export default function CreateCustomerPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    // tenant qiymatini raqam (integer)ga o‘girish
-    const data = {
-      ...form,
-      tenant: parseInt(form.tenant),
-    };
-  
     try {
-        await createCustomer(form);
-        router.push(`/customers?tenant=${form.tenant}`);
-        
+      await createCustomer(form);
+      toast.success("Customer muvaffaqiyatli qo‘shildi!");
+      router.push("/customers?tenant=" + form.tenant);
     } catch (err) {
       console.error("Yaratishda xatolik:", err);
+      toast.error("Xatolik yuz berdi!");
     }
   };
   
 
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     try {
-//       await createCustomer(form);
-//       router.push("/customers");
-//     } catch (err) {
-//       console.error("Yaratishda xatolik:", err);
-//     }
-//   };
+
+
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">AddNew</h1>
+      <h1 className="text-2xl font-bold mb-4">AddNewCustomer</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
