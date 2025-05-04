@@ -14,9 +14,15 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+    console.log("API:", process.env.NEXT_PUBLIC_API_URL);
     try {
+        // const response = await axios.post(
+        //     `${process.env.NEXT_PUBLIC_API_URL}/api/token/`,
+        //     form
+        //   );
         const response = await axios.post(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/token/`,
+            // 👇 vaqtincha to‘g‘ridan-to‘g‘ri Railway URL'sini qo‘yamiz
+            "https://saas-backend-production-5b48.up.railway.app/api/token/",
             form
           );
           
