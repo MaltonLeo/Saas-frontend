@@ -12,6 +12,7 @@ export default function DashboardPage() {
     const token = localStorage.getItem("access_token");
     if (!token) {
       router.push("/login");
+      return;
     } else {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       loadData();
