@@ -22,8 +22,7 @@ export default function LoginPage() {
     try {
       const response = await axios.post(
         // ✅ To'g'ridan-to'g'ri Railway URL bilan login
-        "https://saas-backend-production-5b48.up.railway.app/api/token/",
-        form
+        `${process.env.NEXT_PUBLIC_API_URL}/token/`, form
       );
 
       const { access, refresh } = response.data;
